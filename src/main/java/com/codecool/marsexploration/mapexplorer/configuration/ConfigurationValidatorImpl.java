@@ -1,6 +1,8 @@
 package com.codecool.marsexploration.mapexplorer.configuration;
 
 import com.codecool.marsexploration.mapexplorer.configuration.model.Configuration;
+import com.codecool.marsexploration.mapexplorer.maploader.MapLoader;
+import com.codecool.marsexploration.mapexplorer.maploader.MapLoaderImpl;
 import com.codecool.marsexploration.mapexplorer.maploader.model.Coordinate;
 
 import java.time.Duration;
@@ -11,9 +13,12 @@ import java.util.Objects;
 public class ConfigurationValidatorImpl implements ConfigurationValidator {
     @Override
     public boolean validateConfigurationObject(Configuration configuration) {
+        List<String> mapLoader = new MapLoaderImpl().readAllLines(configuration.map());
+        String map = String.join("", mapLoader);
+        System.out.println(mapLoader);
         return configuration.steps() > 0
-                && checkLandingSpots(configuration.map(), configuration.landingSpot())
-                && checkAdjacentCoordinate(configuration.map(), configuration.landingSpot())
+                && checkLandingSpots(map, configuration.landingSpot())
+                && checkAdjacentCoordinate(map, configuration.landingSpot())
                 && !configuration.map().isEmpty()
                 && checkSymbols(configuration.symbols());
     }
@@ -45,14 +50,35 @@ public class ConfigurationValidatorImpl implements ConfigurationValidator {
         return true;
     }
 
+    //    public boolean checkLandingSpots(String map, Coordinate coordinate) {
+//        int x = coordinate.X();
+//        int y = coordinate.Y();
+//
+////        return Objects.equals(map[x][y], " ");
+//        int sqrtOfMapSize = (int) Math.sqrt(map.length());
+//
+//        String spot = map.split("")[x * sqrtOfMapSize + y]; //(x+1) daca incep de la 1 1
+//        return Objects.equals(spot, " ");
+//    }
     public boolean checkLandingSpots(String map, Coordinate coordinate) {
         int x = coordinate.X();
         int y = coordinate.Y();
-
-//        return Objects.equals(map[x][y], " ");
         int sqrtOfMapSize = (int) Math.sqrt(map.length());
+        char[][] mapArray = new char[sqrtOfMapSize][sqrtOfMapSize];
 
-        String spot = map.split("")[x * sqrtOfMapSize + y]; //(x+1) daca incep de la 1 1
-        return Objects.equals(spot, " ");
+        // Convert the map string into a 2D array
+        int index = 0;
+        for (int i = 0; i < sqrtOfMapSize; i++) {
+            for (int j = 0; j < sqrtOfMapSize; j++) {
+                mapArray[i][j] = map.charAt(index++);
+            }
+        }
+
+        // Check if the spot is valid
+        if (x >= 0 && x < sqrtOfMapSize && y >= 0 && y < sqrtOfMapSize) {
+            return mapArray[x][y] == ' ';
+        }
+
+        return false;
     }
 }
