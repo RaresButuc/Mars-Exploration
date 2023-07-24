@@ -25,7 +25,7 @@ public class validatorTest {
     @Test
     public void validateConfigObject() {
         Configuration configurationTrue = new Configuration("src/main/resources/exploration-1.map", new Coordinate(1, 2), List.of("#", "&", "*", "%"), 5);
-        Configuration configurationFalse = new Configuration("src/main/resources/exploration-1.map", new Coordinate(10, 2), List.of("#", "&", "*", "%"), 5);
+        Configuration configurationFalse = new Configuration("src/main/resources/exploration-1.map", new Coordinate(1, 20), List.of("#", "&", "*", "%"), 5);
 
         assertTrue(configurationValidator.validateConfigurationObject(configurationTrue));
         assertFalse(configurationValidator.validateConfigurationObject(configurationFalse));

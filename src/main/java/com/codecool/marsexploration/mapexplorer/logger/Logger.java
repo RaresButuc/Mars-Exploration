@@ -1,5 +1,6 @@
 package com.codecool.marsexploration.mapexplorer.logger;
 
 public interface Logger {
-    void log(String message);
+    public void logInfo(String message);
+    public void logError(String message);
 }

@@ -1,6 +1,8 @@
 package com.codecool.marsexploration.mapexplorer;
 
 import com.codecool.marsexploration.mapexplorer.configuration.ConfigurationValidatorImpl;
+import com.codecool.marsexploration.mapexplorer.logger.ConsoleLogger;
+import com.codecool.marsexploration.mapexplorer.logger.Logger;
 import com.codecool.marsexploration.mapexplorer.maploader.MapLoader;
 import com.codecool.marsexploration.mapexplorer.maploader.MapLoaderImpl;
 import com.codecool.marsexploration.mapexplorer.maploader.model.Coordinate;
@@ -16,10 +18,7 @@ public class Application {
         Coordinate landingSpot = new Coordinate(6, 6);
 //        MapLoader mapLoader= new MapLoaderImpl();
 //        System.out.println(mapLoader.load(mapFile).toString());
-        // Add your code here
-        String l = "      l                    ";
-//        String [][] l = [[" "," "," "],["l"," "," "]];
-        System.out.println(new ConfigurationValidatorImpl().checkLandingSpots(l, new Coordinate(1, 1)));
+
     }
 
 }
