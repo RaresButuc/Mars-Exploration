@@ -25,9 +25,7 @@ public class ConfigurationValidatorImpl implements ConfigurationValidator {
     public List<Coordinate> checkAdjacentCoordinate(Coordinate coordinate, Configuration mapConfiguration) {
         List<Coordinate> adjCoordinates = new ArrayList<>();
         int x = coordinate.X();
-        System.out.println("x: " + x);
         int y = coordinate.Y();
-        System.out.println("y: " + y);
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 Coordinate coordinateToAdd = new Coordinate(x + i, y + j);
