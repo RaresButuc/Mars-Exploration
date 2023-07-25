@@ -18,25 +18,34 @@ public class ConfigurationValidatorImpl implements ConfigurationValidator {
         System.out.println(mapLoader);
         return configuration.steps() > 0
                 && checkLandingSpots(map, configuration.landingSpot())
-                && checkAdjacentCoordinate(map, configuration.landingSpot())
+                && checkAdjacentCoordinate(map, configuration.landingSpot()).size() > 0
                 && !configuration.map().isEmpty()
                 && checkSymbols(configuration.symbols());
     }
 
-    private boolean checkAdjacentCoordinate(String map, Coordinate coordinate) {
+    @Override
+    public List<Coordinate> checkAdjacentCoordinate(String map, Coordinate coordinate) {
+        List<Coordinate> adjCoordinates = new ArrayList<>();
         int x = coordinate.X();
+        System.out.println("x: " + x);
         int y = coordinate.Y();
+        System.out.println("y: " + y);
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
-                if (i != 0 && j != 0 && checkLandingSpots(map, new Coordinate(x + i, y + j))) {
-                    return true;
+                System.out.println(new Coordinate(x + i, y + j));
+                if (checkLandingSpots(map, new Coordinate(x + i, y + j))) {
+                    System.out.println("Am intrat in if");
+                    adjCoordinates.add(new Coordinate(x + i, y + j));
                 }
             }
         }
-        return false;
+        adjCoordinates.removeIf(p -> p.X() == x && p.Y() == y);
+        System.out.println(adjCoordinates);
+        return adjCoordinates;
     }
 
-    private boolean checkSymbols(List<String> symbols) {
+    @Override
+    public boolean checkSymbols(List<String> symbols) {
         List<String> allSymbols = List.of("#", "&", "*", "%");
         if (symbols.size() == 0) {
             return false;
@@ -60,6 +69,8 @@ public class ConfigurationValidatorImpl implements ConfigurationValidator {
 //        String spot = map.split("")[x * sqrtOfMapSize + y]; //(x+1) daca incep de la 1 1
 //        return Objects.equals(spot, " ");
 //    }
+
+    @Override
     public boolean checkLandingSpots(String map, Coordinate coordinate) {
         int x = coordinate.X();
         int y = coordinate.Y();
