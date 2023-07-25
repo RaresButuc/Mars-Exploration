@@ -32,15 +32,16 @@ public class ConfigurationValidatorImpl implements ConfigurationValidator {
         System.out.println("y: " + y);
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
-                System.out.println(new Coordinate(x + i, y + j));
+                System.out.println("check landing spots " + checkLandingSpots(map, new Coordinate(x + i, y + j)));
                 if (checkLandingSpots(map, new Coordinate(x + i, y + j))) {
                     System.out.println("Am intrat in if");
                     adjCoordinates.add(new Coordinate(x + i, y + j));
+                    System.out.println("Adj coord in if " + adjCoordinates);
                 }
             }
         }
-        adjCoordinates.removeIf(p -> p.X() == x && p.Y() == y);
-        System.out.println(adjCoordinates);
+
+        System.out.println("Adj coord before return: " + adjCoordinates);
         return adjCoordinates;
     }
 
@@ -58,8 +59,8 @@ public class ConfigurationValidatorImpl implements ConfigurationValidator {
 
         return true;
     }
-
-    //    public boolean checkLandingSpots(String map, Coordinate coordinate) {
+//    @Override
+//        public boolean checkLandingSpots(String map, Coordinate coordinate) {
 //        int x = coordinate.X();
 //        int y = coordinate.Y();
 //
@@ -82,14 +83,18 @@ public class ConfigurationValidatorImpl implements ConfigurationValidator {
         for (int i = 0; i < sqrtOfMapSize; i++) {
             for (int j = 0; j < sqrtOfMapSize; j++) {
                 mapArray[i][j] = map.charAt(index++);
+                System.out.println("map arr i, j " + mapArray[i][j] + " i= " + i + " j= " + j);
+                System.out.println("map[" + i + ", " + j + "] = >" + mapArray[i][j]+"<");
             }
         }
 
         // Check if the spot is valid
         if (x >= 0 && x < sqrtOfMapSize && y >= 0 && y < sqrtOfMapSize) {
+            System.out.println("map arr " + mapArray[x][y]);
             return mapArray[x][y] == ' ';
         }
 
         return false;
     }
+
 }
