@@ -9,9 +9,9 @@ import java.util.List;
 public interface ConfigurationValidator {
     boolean validateConfigurationObject(Configuration configuration);
 
-    List<Coordinate> checkAdjacentCoordinate(String map, Coordinate coordinate);
+    List<Coordinate> checkAdjacentCoordinate( Coordinate coordinate, Configuration configuration);
 
     boolean checkSymbols(List<String> symbols);
 
-    boolean checkLandingSpots(String map, Coordinate coordinate);
+    boolean checkLandingSpots(Coordinate coordinate, Configuration configuration);
 }

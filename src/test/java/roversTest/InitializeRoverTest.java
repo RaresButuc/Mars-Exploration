@@ -3,42 +3,37 @@ package roversTest;
 import com.codecool.marsexploration.mapexplorer.configuration.ConfigurationValidator;
 import com.codecool.marsexploration.mapexplorer.configuration.ConfigurationValidatorImpl;
 import com.codecool.marsexploration.mapexplorer.configuration.model.Configuration;
-import com.codecool.marsexploration.mapexplorer.maploader.MapLoader;
-import com.codecool.marsexploration.mapexplorer.maploader.MapLoaderImpl;
 import com.codecool.marsexploration.mapexplorer.maploader.model.Coordinate;
 import com.codecool.marsexploration.mapexplorer.rovers.InitializeRover;
 import com.codecool.marsexploration.mapexplorer.rovers.model.MarsRover;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import java.util.HashMap;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class InitializeRoverTest {
     InitializeRover initializeRover = new InitializeRover();
 
-//    @ParameterizedTest
-//    @CsvSource({"7,5","12,1","3,18","18,0","4,2","23,7","30,30", "17,2", "0,2"})
-    @Test
-    void roverInit() {
-        Configuration configurationTrue = new Configuration("src/main/resources/exploration-0.map", new Coordinate(1, 2), List.of("#", "&", "*", "%"), 5);
-//MapLoader mapLoader = new MapLoaderImpl();
-//mapLoader.load("src/main/resources/exploration-0.map");
-//        String map = String.join("", mapLoader);
+    @ParameterizedTest
+    @CsvSource({"7,5","12,1","3,18","18,0","4,2","23,7","30,30", "17,2", "0,2"})
+    void roverInit(int x, int y) {
+        String mapFileName = "src/main/resources/exploration-0.map";
+        Configuration mapConfiguration = new Configuration(mapFileName, new Coordinate(x, y), List.of("#", "&", "*", "%"), 5);
         ConfigurationValidator configurationValidator = new ConfigurationValidatorImpl();
+        List<Coordinate> emptySpots = configurationValidator.checkAdjacentCoordinate(new Coordinate(x, y),mapConfiguration );
         HashMap<String, Coordinate> resources = new HashMap<>();
+
         resources.put("#", new Coordinate(2, 2));
-        if (configurationValidator.validateConfigurationObject(configurationTrue)){
 
-            System.out.println(" config valid "+configurationValidator.checkLandingSpots("src/main/resources/exploration-0.map", new Coordinate(0, 1)));
-            MarsRover actual = initializeRover.initializeRover("src/main/resources/exploration-0.map", new Coordinate(2,2), 2, resources);
-            System.out.println("Actual "+ actual);
-            assertNotNull(actual);
-       }
+        MarsRover actual = initializeRover.initializeRover(new Coordinate(x, y), 2, resources, mapConfiguration);
 
-
+//        System.out.println("Actual " + actual.getCurrentPosition().toString());
+//        System.out.println("Empty spots: "+emptySpots);
+        assertNotNull(actual);
+        assertTrue(emptySpots.contains(actual.getCurrentPosition()));
     }
 }

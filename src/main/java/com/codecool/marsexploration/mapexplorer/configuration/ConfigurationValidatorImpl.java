@@ -11,20 +11,18 @@ import java.util.List;
 import java.util.Objects;
 
 public class ConfigurationValidatorImpl implements ConfigurationValidator {
+
     @Override
-    public boolean validateConfigurationObject(Configuration configuration) {
-        List<String> mapLoader = new MapLoaderImpl().readAllLines(configuration.map());
-        String map = String.join("", mapLoader);
-        System.out.println(mapLoader);
-        return configuration.steps() > 0
-                && checkLandingSpots(map, configuration.landingSpot())
-                && checkAdjacentCoordinate(map, configuration.landingSpot()).size() > 0
-                && !configuration.map().isEmpty()
-                && checkSymbols(configuration.symbols());
+    public boolean validateConfigurationObject(Configuration mapConfiguration) {
+        return mapConfiguration.steps() > 0
+                && checkLandingSpots(mapConfiguration.landingSpot(), mapConfiguration)
+                && checkAdjacentCoordinate(mapConfiguration.landingSpot(), mapConfiguration).size() > 0
+                && !mapConfiguration.map().isEmpty()
+                && checkSymbols(mapConfiguration.symbols());
     }
 
     @Override
-    public List<Coordinate> checkAdjacentCoordinate(String map, Coordinate coordinate) {
+    public List<Coordinate> checkAdjacentCoordinate(Coordinate coordinate, Configuration mapConfiguration) {
         List<Coordinate> adjCoordinates = new ArrayList<>();
         int x = coordinate.X();
         System.out.println("x: " + x);
@@ -32,16 +30,12 @@ public class ConfigurationValidatorImpl implements ConfigurationValidator {
         System.out.println("y: " + y);
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
-                System.out.println("check landing spots " + checkLandingSpots(map, new Coordinate(x + i, y + j)));
-                if (checkLandingSpots(map, new Coordinate(x + i, y + j))) {
-                    System.out.println("Am intrat in if");
-                    adjCoordinates.add(new Coordinate(x + i, y + j));
-                    System.out.println("Adj coord in if " + adjCoordinates);
+                Coordinate coordinateToAdd = new Coordinate(x + i, y + j);
+                if (checkLandingSpots(coordinateToAdd, mapConfiguration)) {
+                    adjCoordinates.add(coordinateToAdd);
                 }
             }
         }
-
-        System.out.println("Adj coord before return: " + adjCoordinates);
         return adjCoordinates;
     }
 
@@ -56,23 +50,12 @@ public class ConfigurationValidatorImpl implements ConfigurationValidator {
                 return false;
             }
         }
-
         return true;
     }
-//    @Override
-//        public boolean checkLandingSpots(String map, Coordinate coordinate) {
-//        int x = coordinate.X();
-//        int y = coordinate.Y();
-//
-////        return Objects.equals(map[x][y], " ");
-//        int sqrtOfMapSize = (int) Math.sqrt(map.length());
-//
-//        String spot = map.split("")[x * sqrtOfMapSize + y]; //(x+1) daca incep de la 1 1
-//        return Objects.equals(spot, " ");
-//    }
 
     @Override
-    public boolean checkLandingSpots(String map, Coordinate coordinate) {
+    public boolean checkLandingSpots(Coordinate coordinate, Configuration mapConfiguration) {
+        String map = convertConfigurationIntoMap(mapConfiguration);
         int x = coordinate.X();
         int y = coordinate.Y();
         int sqrtOfMapSize = (int) Math.sqrt(map.length());
@@ -83,18 +66,17 @@ public class ConfigurationValidatorImpl implements ConfigurationValidator {
         for (int i = 0; i < sqrtOfMapSize; i++) {
             for (int j = 0; j < sqrtOfMapSize; j++) {
                 mapArray[i][j] = map.charAt(index++);
-                System.out.println("map arr i, j " + mapArray[i][j] + " i= " + i + " j= " + j);
-                System.out.println("map[" + i + ", " + j + "] = >" + mapArray[i][j]+"<");
             }
         }
-
         // Check if the spot is valid
         if (x >= 0 && x < sqrtOfMapSize && y >= 0 && y < sqrtOfMapSize) {
-            System.out.println("map arr " + mapArray[x][y]);
             return mapArray[x][y] == ' ';
         }
-
         return false;
     }
 
+    public String convertConfigurationIntoMap(Configuration mapConfiguration){
+        List<String> mapLoader = new MapLoaderImpl().readAllLines(mapConfiguration.map());
+        return String.join("", mapLoader);
+    }
 }
