@@ -11,32 +11,36 @@ import java.util.List;
 import java.util.Objects;
 
 public class ConfigurationValidatorImpl implements ConfigurationValidator {
+
     @Override
-    public boolean validateConfigurationObject(Configuration configuration) {
-        List<String> mapLoader = new MapLoaderImpl().readAllLines(configuration.map());
-        String map = String.join("", mapLoader);
-        System.out.println(mapLoader);
-        return configuration.steps() > 0
-                && checkLandingSpots(map, configuration.landingSpot())
-                && checkAdjacentCoordinate(map, configuration.landingSpot())
-                && !configuration.map().isEmpty()
-                && checkSymbols(configuration.symbols());
+    public boolean validateConfigurationObject(Configuration mapConfiguration) {
+        return mapConfiguration.steps() > 0
+                && checkLandingSpots(mapConfiguration.landingSpot(), mapConfiguration)
+                && checkAdjacentCoordinate(mapConfiguration.landingSpot(), mapConfiguration).size() > 0
+                && !mapConfiguration.map().isEmpty()
+                && checkSymbols(mapConfiguration.symbols());
     }
 
-    private boolean checkAdjacentCoordinate(String map, Coordinate coordinate) {
+    @Override
+    public List<Coordinate> checkAdjacentCoordinate(Coordinate coordinate, Configuration mapConfiguration) {
+        List<Coordinate> adjCoordinates = new ArrayList<>();
         int x = coordinate.X();
+        System.out.println("x: " + x);
         int y = coordinate.Y();
+        System.out.println("y: " + y);
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
-                if (i != 0 && j != 0 && checkLandingSpots(map, new Coordinate(x + i, y + j))) {
-                    return true;
+                Coordinate coordinateToAdd = new Coordinate(x + i, y + j);
+                if (checkLandingSpots(coordinateToAdd, mapConfiguration)) {
+                    adjCoordinates.add(coordinateToAdd);
                 }
             }
         }
-        return false;
+        return adjCoordinates;
     }
 
-    private boolean checkSymbols(List<String> symbols) {
+    @Override
+    public boolean checkSymbols(List<String> symbols) {
         List<String> allSymbols = List.of("#", "&", "*", "%");
         if (symbols.size() == 0) {
             return false;
@@ -46,21 +50,12 @@ public class ConfigurationValidatorImpl implements ConfigurationValidator {
                 return false;
             }
         }
-
         return true;
     }
 
-    //    public boolean checkLandingSpots(String map, Coordinate coordinate) {
-//        int x = coordinate.X();
-//        int y = coordinate.Y();
-//
-////        return Objects.equals(map[x][y], " ");
-//        int sqrtOfMapSize = (int) Math.sqrt(map.length());
-//
-//        String spot = map.split("")[x * sqrtOfMapSize + y]; //(x+1) daca incep de la 1 1
-//        return Objects.equals(spot, " ");
-//    }
-    public boolean checkLandingSpots(String map, Coordinate coordinate) {
+    @Override
+    public boolean checkLandingSpots(Coordinate coordinate, Configuration mapConfiguration) {
+        String map = convertConfigurationIntoMap(mapConfiguration);
         int x = coordinate.X();
         int y = coordinate.Y();
         int sqrtOfMapSize = (int) Math.sqrt(map.length());
@@ -73,12 +68,15 @@ public class ConfigurationValidatorImpl implements ConfigurationValidator {
                 mapArray[i][j] = map.charAt(index++);
             }
         }
-
         // Check if the spot is valid
         if (x >= 0 && x < sqrtOfMapSize && y >= 0 && y < sqrtOfMapSize) {
             return mapArray[x][y] == ' ';
         }
-
         return false;
+    }
+
+    public String convertConfigurationIntoMap(Configuration mapConfiguration){
+        List<String> mapLoader = new MapLoaderImpl().readAllLines(mapConfiguration.map());
+        return String.join("", mapLoader);
     }
 }
