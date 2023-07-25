@@ -17,7 +17,7 @@ public class MapLoaderImpl implements MapLoader {
         return new Map(representation, true);
     }
 
-    private List<String> readAllLines(String mapFile) {
+    public List<String> readAllLines(String mapFile) {
         List<String> allLines = new ArrayList<>();
         try {
             File myObj = new File(mapFile);
