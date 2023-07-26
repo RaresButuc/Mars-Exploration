@@ -4,19 +4,21 @@ import com.codecool.marsexploration.mapexplorer.exploration.ExplorationOutcome;
 import com.codecool.marsexploration.mapexplorer.maploader.model.Coordinate;
 import com.codecool.marsexploration.mapexplorer.rovers.model.MarsRover;
 
+import java.util.List;
+
 public class SimulationContext {
     private int numberOfSteps;
     private int timeoutSteps;
     private MarsRover rover;
     private Coordinate spaceshipLocation;
-    private String[][] map;
-    private String[] monitoredResources;
+    private String map;
+    private List<String> monitoredResources;
     private ExplorationOutcome explorationOutcome;
 
     // Constructor
     public SimulationContext(int numberOfSteps, int timeoutSteps, MarsRover rover,
-                             Coordinate spaceshipLocation, String[][] map,
-                             String[] monitoredResources) {
+                             Coordinate spaceshipLocation, String map,
+                             List<String> monitoredResources) {
         this.numberOfSteps = numberOfSteps;
         this.timeoutSteps = timeoutSteps;
         this.rover = rover;
@@ -51,11 +53,11 @@ public class SimulationContext {
         return spaceshipLocation;
     }
 
-    public String[][] getMap() {
+    public String getMap() {
         return map;
     }
 
-    public String[] getMonitoredResources() {
+    public List<String> getMonitoredResources() {
         return monitoredResources;
     }
 }
