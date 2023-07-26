@@ -8,20 +8,18 @@ import com.codecool.marsexploration.mapexplorer.maploader.MapLoaderImpl;
 import com.codecool.marsexploration.mapexplorer.maploader.model.Coordinate;
 import com.codecool.marsexploration.mapexplorer.rovers.InitializeRover;
 import com.codecool.marsexploration.mapexplorer.rovers.model.MarsRover;
-import com.sun.security.jgss.GSSUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class ExplorationSimulator {
+public class ExplorationSimulatorNotUsed {
     private final InitializeRover initializeRover = new InitializeRover();
     private final ConfigurationValidator configurationValidator = new ConfigurationValidatorImpl();
 
-    public ExplorationOutcome runSimulation(Configuration configuration) {
+    public ExplorationOutcome runSimulation(Configuration configuration, int sight) {
         Coordinate landingSpot = configuration.landingSpot();
         boolean isValidLandingSpot =configurationValidator.checkLandingSpots(landingSpot, configuration);
-        int sight = configuration.steps();
         HashMap<String, List<Coordinate>> resources = getResources(configuration);
 
         // Generate the context
@@ -34,13 +32,10 @@ public class ExplorationSimulator {
         int steps = configuration.steps();
         for (int step = 1; step <= steps; step++) {
             // Run ordered simulation steps for each iteration of the loop
-            System.out.println("intra in for");
             ExplorationOutcome outcome = runSimulationStep(marsRover,configuration);
-            System.out.println(outcome);
             if (outcome == ExplorationOutcome.TIMEOUT || outcome == ExplorationOutcome.COLONIZABLE) {
-                System.out.println("intra in if");
                 // Outcome found, terminate the simulation
-                System.out.println("outcome.name().length()");
+                System.out.println(outcome.name());
                 return outcome;
             }
         }
@@ -55,12 +50,7 @@ public class ExplorationSimulator {
         if(emptySpots.size() == 8){
             return ExplorationOutcome.TIMEOUT;
         }
-
-        //System.out.println(currentPosition);
-        // Implement the logic for a single simulation step here.
-        // You can move the rover, update its sight, check for resources, etc.
-        // Return ExplorationOutcome.COLONIZABLE if the rover finds a desired outcome, otherwise, return ExplorationOutcome.ERROR.
-   return ExplorationOutcome.COLONIZABLE;
+        return ExplorationOutcome.COLONIZABLE;
     }
 
     public  HashMap<String, List<Coordinate>> getResources(Configuration configuration) {
