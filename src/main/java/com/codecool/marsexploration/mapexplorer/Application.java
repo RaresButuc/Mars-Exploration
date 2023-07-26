@@ -27,17 +27,23 @@ public class Application {
         Coordinate landingSpot = new Coordinate(6, 6);
         MapLoader mapLoader= new MapLoaderImpl();
         ExplorationSimulator explorationSimulator = new ExplorationSimulator();
-        InitializeRover initializeRover = new InitializeRover();
-
         ConfigurationValidatorImpl configurationValidator = new ConfigurationValidatorImpl();
-        String mapContent=mapLoader.load(mapFile).toString();
-
         Configuration mapConfiguration = new Configuration(mapFile, landingSpot, List.of("#", "&", "*", "%"), 2);
-        HashMap<String, List<Coordinate>> resources = explorationSimulator.getResources(mapConfiguration);
-        MarsRover rover = initializeRover.initializeRover(landingSpot, 2, resources, mapConfiguration);
-        SimulationContext simulationContext = new SimulationContext(2, 2, rover, landingSpot, mapFile, List.of("#", "&", "*", "%"));
-//        explorationSimulator.runSimulation(mapConfiguration);
+
+        if(configurationValidator.checkLandingSpots(landingSpot,mapConfiguration)) {
+            InitializeRover initializeRover = new InitializeRover();
+            String mapContent=mapLoader.load(mapFile).toString();
+
+            HashMap<String, List<Coordinate>> resources = explorationSimulator.getResources(mapConfiguration);
+            MarsRover rover = initializeRover.initializeRover(landingSpot, 2, resources, mapConfiguration);
+            SimulationContext simulationContext = new SimulationContext(2, 2, rover, landingSpot, mapFile, List.of("#", "&", "*", "%"));
+        explorationSimulator.runSimulation(mapConfiguration);
 //        explorationSimulator.getResources(mapConfiguration);
+            System.out.println(rover.getCurrentPosition());
+        }else {
+            System.out.println("Invalid landing Spot");}
+
+
     }
 
 

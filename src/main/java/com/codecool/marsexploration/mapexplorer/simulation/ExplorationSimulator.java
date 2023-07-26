@@ -34,8 +34,11 @@ public class ExplorationSimulator {
         int steps = configuration.steps();
         for (int step = 1; step <= steps; step++) {
             // Run ordered simulation steps for each iteration of the loop
-            ExplorationOutcome outcome = runSimulationStep(marsRover);
+            System.out.println("intra in for");
+            ExplorationOutcome outcome = runSimulationStep(marsRover,configuration);
+            System.out.println(outcome);
             if (outcome == ExplorationOutcome.TIMEOUT || outcome == ExplorationOutcome.COLONIZABLE) {
+                System.out.println("intra in if");
                 // Outcome found, terminate the simulation
                 System.out.println("outcome.name().length()");
                 return outcome;
@@ -46,19 +49,24 @@ public class ExplorationSimulator {
         return ExplorationOutcome.TIMEOUT;
     }
 
-    private ExplorationOutcome runSimulationStep(MarsRover rover) {
+    private ExplorationOutcome runSimulationStep(MarsRover rover, Configuration configuration) {
         Coordinate currentPosition = rover.getCurrentPosition();
+        List<Coordinate> emptySpots = configurationValidator.checkAdjacentCoordinate(currentPosition,configuration);
+        if(emptySpots.size() == 8){
+            return ExplorationOutcome.TIMEOUT;
+        }
+
         //System.out.println(currentPosition);
         // Implement the logic for a single simulation step here.
         // You can move the rover, update its sight, check for resources, etc.
         // Return ExplorationOutcome.COLONIZABLE if the rover finds a desired outcome, otherwise, return ExplorationOutcome.ERROR.
-   return null;
+   return ExplorationOutcome.COLONIZABLE;
     }
 
     public  HashMap<String, List<Coordinate>> getResources(Configuration configuration) {
         List<String> mapLoader = new MapLoaderImpl().readAllLines(configuration.map());
         String map= String.join("", mapLoader);
-        System.out.println("map= "+map);
+       // System.out.println("map= "+map);
         HashMap<String, List<Coordinate>> resourcesMap = new HashMap<>();
         int rows = mapLoader.size();
         int cols = mapLoader.get(0).length();
@@ -73,13 +81,13 @@ public class ExplorationSimulator {
                 }
             }
         }
-        for (String symbolKey : resourcesMap.keySet()) {
-            List<Coordinate> coordinates = resourcesMap.get(symbolKey);
-            System.out.println("Symbol: " + symbolKey);
-            for (Coordinate coordinate : coordinates) {
-                System.out.println("   Coordinate: " + coordinate);
-            }
-        }
+       // for (String symbolKey : resourcesMap.keySet()) {
+           // List<Coordinate> coordinates = resourcesMap.get(symbolKey);
+            //System.out.println("Symbol: " + symbolKey);
+           // for (Coordinate coordinate : coordinates) {
+               // System.out.println("   Coordinate: " + coordinate);
+           // }
+       // }
 
         return resourcesMap;
     }
