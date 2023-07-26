@@ -26,13 +26,14 @@ public class Application {
         ConfigurationValidatorImpl configurationValidator = new ConfigurationValidatorImpl();
         Configuration mapConfiguration = new Configuration(mapFile, landingSpot, List.of("#", "&", "*", "%"), 30);
 
+
         if(configurationValidator.checkLandingSpots(landingSpot,mapConfiguration)) {
             InitializeRover initializeRover = new InitializeRover();
             String mapContent=mapLoader.load(mapFile).toString();
 
 //            HashMap<String, List<Coordinate>> resources = explorationSimulatorNotUsed.getResources(mapConfiguration);
             MarsRover rover = initializeRover.initializeRover(landingSpot, 2, resources, mapConfiguration);
-            SimulationContext simulationContext = new SimulationContext(2, 2, rover, landingSpot, mapFile, List.of("#", "&", "*", "%"));
+            SimulationContext simulationContext = new SimulationContext(2, 2, rover, landingSpot, mapFile, resources);
 //        explorationSimulatorNotUsed.runSimulation(mapConfiguration, 2);
 //        explorationSimulator.getResources(mapConfiguration);
             System.out.println(rover.getCurrentPosition());
