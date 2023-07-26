@@ -36,8 +36,8 @@ public class Application {
         HashMap<String, List<Coordinate>> resources = explorationSimulator.getResources(mapConfiguration);
         MarsRover rover = initializeRover.initializeRover(landingSpot, 2, resources, mapConfiguration);
         SimulationContext simulationContext = new SimulationContext(2, 2, rover, landingSpot, mapFile, List.of("#", "&", "*", "%"));
-        explorationSimulator.runSimulation(mapConfiguration);
-        System.out.println(explorationSimulator);
+//        explorationSimulator.runSimulation(mapConfiguration);
+//        explorationSimulator.getResources(mapConfiguration);
     }
 
 

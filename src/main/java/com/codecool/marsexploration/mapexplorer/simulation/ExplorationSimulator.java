@@ -8,6 +8,7 @@ import com.codecool.marsexploration.mapexplorer.maploader.MapLoaderImpl;
 import com.codecool.marsexploration.mapexplorer.maploader.model.Coordinate;
 import com.codecool.marsexploration.mapexplorer.rovers.InitializeRover;
 import com.codecool.marsexploration.mapexplorer.rovers.model.MarsRover;
+import com.sun.security.jgss.GSSUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -57,13 +58,14 @@ public class ExplorationSimulator {
     public  HashMap<String, List<Coordinate>> getResources(Configuration configuration) {
         List<String> mapLoader = new MapLoaderImpl().readAllLines(configuration.map());
         String map= String.join("", mapLoader);
+        System.out.println("map= "+map);
         HashMap<String, List<Coordinate>> resourcesMap = new HashMap<>();
-        int rows = (int) map.lines().count();
-        int cols = map.indexOf("\n");
+        int rows = mapLoader.size();
+        int cols = mapLoader.get(0).length();
 
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                char symbol = map.charAt(i * (cols + 1) + j);
+                char symbol = map.charAt(i * (cols) + j);
                 if (symbol != ' ' && symbol != '\n') {
                     String symbolKey = Character.toString(symbol);
                     Coordinate coordinate = new Coordinate(j, i);
@@ -71,13 +73,13 @@ public class ExplorationSimulator {
                 }
             }
         }
-//        for (String symbolKey : resourcesMap.keySet()) {
-//            List<Coordinate> coordinates = resourcesMap.get(symbolKey);
-//            System.out.println("Symbol: " + symbolKey);
-//            for (Coordinate coordinate : coordinates) {
-//                System.out.println("   Coordinate: " + coordinate);
-//            }
-//        }
+        for (String symbolKey : resourcesMap.keySet()) {
+            List<Coordinate> coordinates = resourcesMap.get(symbolKey);
+            System.out.println("Symbol: " + symbolKey);
+            for (Coordinate coordinate : coordinates) {
+                System.out.println("   Coordinate: " + coordinate);
+            }
+        }
 
         return resourcesMap;
     }
