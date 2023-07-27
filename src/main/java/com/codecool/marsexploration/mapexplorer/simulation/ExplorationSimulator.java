@@ -31,6 +31,8 @@ public class ExplorationSimulator {
 
         while (true) {
             if (isOutcomeReached(simulationContext, configuration)) {
+
+                System.out.println("Outcome: "+ simulationContext.getExplorationOutcome());
                 break;
             }
 
@@ -68,11 +70,11 @@ public class ExplorationSimulator {
                     }
                 }
             }
-        }
 
-        simulationContext.setExplorationOutcome(ExplorationOutcome.TIMEOUT);
+
+    //    simulationContext.setExplorationOutcome(ExplorationOutcome.TIMEOUT);
         simulationContext.getRover().setCurrentPosition(simulationContext.getSpaceshipLocation());
-
+        }
 
     }
 
