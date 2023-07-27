@@ -21,7 +21,6 @@ public class Application {
         HashMap<String, List<Coordinate>> resources = new HashMap<>();
         Coordinate landingSpot = new Coordinate(6, 6);
         MapLoader mapLoader= new MapLoaderImpl();
-        ExplorationSimulatorNotUsed explorationSimulatorNotUsed = new ExplorationSimulatorNotUsed();
         ConfigurationValidatorImpl configurationValidator = new ConfigurationValidatorImpl();
         Configuration mapConfiguration = new Configuration(mapFile, landingSpot, List.of("#", "&", "*", "%"), 30);
 
@@ -32,7 +31,7 @@ public class Application {
 
 //            HashMap<String, List<Coordinate>> resources = explorationSimulatorNotUsed.getResources(mapConfiguration);
             MarsRover rover = initializeRover.initializeRover(landingSpot, 2, resources, mapConfiguration);
-            SimulationContext simulationContext = new SimulationContext(0, 100, rover, landingSpot, mapFile, resources);
+            SimulationContext simulationContext = new SimulationContext(0, 20, rover, landingSpot, mapFile, resources);
 //        explorationSimulatorNotUsed.runSimulation(mapConfiguration, 2);
             ExplorationSimulator explorationSimulator = new ExplorationSimulator(simulationContext,configurationValidator,mapConfiguration);
             explorationSimulator.startExploring();
