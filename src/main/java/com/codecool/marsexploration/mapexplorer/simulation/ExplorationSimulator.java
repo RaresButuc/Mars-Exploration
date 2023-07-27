@@ -54,7 +54,7 @@ public class ExplorationSimulator {
             }
         }
         fileLogger.logInfo("EVENT outcome; OUTCOME " + simulationContext.getExplorationOutcome());
-        configurationValidator.roverMap(configuration, visitedCoordonate);
+        configurationValidator.roverMap(simulationContext.getSpaceshipLocation(), configuration, visitedCoordonate);
         simulationContext.getRover().setCurrentPosition(simulationContext.getSpaceshipLocation());
     }
 
