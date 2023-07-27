@@ -62,7 +62,7 @@ public class ConfigurationValidatorImpl implements ConfigurationValidator {
         char[][] mapArrayChar = getMap2D(mapConfiguration);
         String [][] mapArray = convertChar2DToString2D(mapArrayChar);
         for (Coordinate coordinate : coordinates) {
-            mapArray[coordinate.X()][coordinate.Y()] = "\uD83D\uDE93";
+            mapArray[coordinate.X()][coordinate.Y()] = "\uD83D\uDE97";
         }
         for(int i=0; i<mapArray.length; i++){
             for(int j=0; j<mapArray[i].length; j++){
