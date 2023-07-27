@@ -21,7 +21,6 @@ public class Application {
         HashMap<String, List<Coordinate>> resources = new HashMap<>();
         Coordinate landingSpot = new Coordinate(6, 6);
         MapLoader mapLoader= new MapLoaderImpl();
-        ExplorationSimulatorNotUsed explorationSimulatorNotUsed = new ExplorationSimulatorNotUsed();
         ConfigurationValidatorImpl configurationValidator = new ConfigurationValidatorImpl();
         Configuration mapConfiguration = new Configuration(mapFile, landingSpot, List.of("#", "&", "*", "%"), 30);
 
