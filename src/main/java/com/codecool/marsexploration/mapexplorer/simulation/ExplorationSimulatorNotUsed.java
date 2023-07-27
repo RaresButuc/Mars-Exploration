@@ -71,13 +71,13 @@ public class ExplorationSimulatorNotUsed {
                 }
             }
         }
-       // for (String symbolKey : resourcesMap.keySet()) {
-           // List<Coordinate> coordinates = resourcesMap.get(symbolKey);
-            //System.out.println("Symbol: " + symbolKey);
-           // for (Coordinate coordinate : coordinates) {
-               // System.out.println("   Coordinate: " + coordinate);
-           // }
-       // }
+        for (String symbolKey : resourcesMap.keySet()) {
+            List<Coordinate> coordinates = resourcesMap.get(symbolKey);
+            System.out.println("Symbol: " + symbolKey);
+            for (Coordinate coordinate : coordinates) {
+                System.out.println("   Coordinate: " + coordinate);
+            }
+        }
 
         return resourcesMap;
     }
