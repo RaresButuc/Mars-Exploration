@@ -4,6 +4,7 @@ import com.codecool.marsexploration.mapexplorer.configuration.ConfigurationValid
 import com.codecool.marsexploration.mapexplorer.configuration.model.Configuration;
 import com.codecool.marsexploration.mapexplorer.exploration.ExplorationOutcome;
 import com.codecool.marsexploration.mapexplorer.logger.FileLogger;
+import com.codecool.marsexploration.mapexplorer.maploader.MapLoader;
 import com.codecool.marsexploration.mapexplorer.maploader.MapLoaderImpl;
 import com.codecool.marsexploration.mapexplorer.maploader.model.Coordinate;
 
@@ -15,8 +16,9 @@ public class ExplorationSimulator {
     private Configuration configuration;
 
     private List<OutcomeAnalyzer> analyzers;
+    private FileLogger fileLogger;
 
-    public ExplorationSimulator(SimulationContext simulationContext, ConfigurationValidator configurationValidator, Configuration configuration) {
+    public ExplorationSimulator(FileLogger fileLogger, SimulationContext simulationContext, ConfigurationValidator configurationValidator, Configuration configuration) {
         this.simulationContext = simulationContext;
         this.configuration = configuration;
         this.configurationValidator = configurationValidator;
@@ -24,12 +26,11 @@ public class ExplorationSimulator {
         this.analyzers.add(new SuccessAnalyzer());
         this.analyzers.add(new LackOfResourcesAnalyzer());
         this.analyzers.add(new TimeoutAnalyzer());
-//        this.startExploring();
+        this.fileLogger = fileLogger;
     }
 
     public void startExploring() {
         List<Coordinate> visitedCoordonate = new ArrayList<>();
-        FileLogger fileLogger = new FileLogger("src/main/resources/ResultsAfterexploration-0.map");
         fileLogger.clearLogFile();
         while (simulationContext.getNumberOfSteps() < simulationContext.getTimeoutSteps() && simulationContext.getExplorationOutcome() != ExplorationOutcome.COLONIZABLE
                 && !isOutcomeReached(simulationContext, configuration)) {
@@ -73,10 +74,10 @@ public class ExplorationSimulator {
             }
         }
         fileLogger.logInfo("STEP " + simulationContext.getNumberOfSteps() + "; EVENT outcome; OUTCOME " + simulationContext.getExplorationOutcome());
-        System.out.println("Outcome: " + simulationContext.getExplorationOutcome());
-        System.out.println("Places Been: "+ visitedCoordonate);
+        configurationValidator.roverMap(configuration,visitedCoordonate);
         simulationContext.getRover().setCurrentPosition(simulationContext.getSpaceshipLocation());
     }
+
 
 
     public HashMap<String, List<Coordinate>> findResources(Configuration configuration, Coordinate currentRoverPosition) {
