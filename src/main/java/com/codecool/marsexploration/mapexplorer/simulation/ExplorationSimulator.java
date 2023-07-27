@@ -30,6 +30,7 @@ public class ExplorationSimulator {
     public void startExploring() {
         List<Coordinate> visitedCoordonate = new ArrayList<>();
         FileLogger fileLogger = new FileLogger("src/main/resources/ResultsAfterexploration-0.map");
+        fileLogger.clearLogFile();
         while (simulationContext.getNumberOfSteps() < simulationContext.getTimeoutSteps() && simulationContext.getExplorationOutcome() != ExplorationOutcome.COLONIZABLE
                 && !isOutcomeReached(simulationContext, configuration)) {
 
