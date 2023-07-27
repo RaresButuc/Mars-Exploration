@@ -2,6 +2,8 @@ package com.codecool.marsexploration.mapexplorer;
 
 import com.codecool.marsexploration.mapexplorer.configuration.ConfigurationValidatorImpl;
 import com.codecool.marsexploration.mapexplorer.configuration.model.Configuration;
+import com.codecool.marsexploration.mapexplorer.database.Resources;
+import com.codecool.marsexploration.mapexplorer.database.ResourcesImpl;
 import com.codecool.marsexploration.mapexplorer.logger.ConsoleLogger;
 import com.codecool.marsexploration.mapexplorer.logger.FileLogger;
 import com.codecool.marsexploration.mapexplorer.logger.Logger;
@@ -23,6 +25,7 @@ public class Application {
     public static void main(String[] args) {
         for (int i = 0; i < 3; i++) {
             String mapFile = workDir + "/resources/exploration-" + i + ".map";
+            String dbFile = "src/main/resources/ResourcesMars.db";
             HashMap<String, List<Coordinate>> resources = new HashMap<>();
             Random random = new Random();
             int x = random.nextInt(32);
@@ -31,6 +34,7 @@ public class Application {
             ConfigurationValidatorImpl configurationValidator = new ConfigurationValidatorImpl();
             Configuration mapConfiguration = new Configuration(mapFile, landingSpot, List.of("#", "&", "*", "%"), 30);
             Logger consoleLogger  = new ConsoleLogger();
+            Resources resourcesDatabase = new ResourcesImpl(dbFile, consoleLogger);
             if (configurationValidator.checkLandingSpots(landingSpot, mapConfiguration)) {
                 InitializeRover initializeRover = new InitializeRover();
                 MarsRover rover = initializeRover.initializeRover(landingSpot, 2, resources, mapConfiguration);
@@ -38,6 +42,7 @@ public class Application {
                 FileLogger fileLogger = new FileLogger(workDir + "/resources/ResultsAfterExploration-" + i + ".map");
                 ExplorationSimulator explorationSimulator = new ExplorationSimulator(fileLogger, simulationContext, configurationValidator, mapConfiguration);
                 explorationSimulator.startExploring();
+                resourcesDatabase.add(simulationContext.getNumberOfSteps(), simulationContext.getNumberOfResources(), simulationContext.getExplorationOutcome().toString());
                 consoleLogger.logInfo("File ResultsAfterExploration-" + i + ".map successful created.");
             } else {
                 consoleLogger.logError("Invalid landing Spot");
