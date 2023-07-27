@@ -6,6 +6,7 @@ import com.codecool.marsexploration.mapexplorer.rovers.model.MarsRover;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SimulationContext {
     private int numberOfSteps;
@@ -61,6 +62,14 @@ public class SimulationContext {
 
     public  HashMap<String, List<Coordinate>> getMonitoredResources() {
         return monitoredResources;
+    }
+
+    public int getNumberOfResources(){
+        int amountOfResources = 0;
+        for (List<Coordinate> resourceList : monitoredResources.values()) {
+            amountOfResources += resourceList.size();
+        }
+        return amountOfResources;
     }
 
     public void setNumberOfSteps(int numberOfSteps) {

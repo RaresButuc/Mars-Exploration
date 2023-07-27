@@ -59,15 +59,27 @@ public class ConfigurationValidatorImpl implements ConfigurationValidator {
 
     @Override
     public void roverMap(Configuration mapConfiguration, List<Coordinate> coordinates) {
-        char[][] mapArray = getMap2D(mapConfiguration);
-
+        char[][] mapArrayChar = getMap2D(mapConfiguration);
+        String [][] mapArray = convertChar2DToString2D(mapArrayChar);
         for (Coordinate coordinate : coordinates) {
-            mapArray[coordinate.X()][coordinate.Y()] = '@';
+            mapArray[coordinate.X()][coordinate.Y()] = "\uD83D\uDE93";
         }
-
-        for (char[] chars : mapArray) {
+        for(int i=0; i<mapArray.length; i++){
+            for(int j=0; j<mapArray[i].length; j++){
+                if(mapArray[i][j].equals("#")){
+                    mapArray[i][j] = "\uD83D\uDDFB";
+                } else if(mapArray[i][j].equals("&")){
+                    mapArray[i][j] = "\uD83D\uDEB5";
+                } else if(mapArray[i][j].equals("%") ){
+                    mapArray[i][j] = "\uD83D\uDD36";
+                } else if(mapArray[i][j].equals("*")){
+                    mapArray[i][j] = "\uD83D\uDCA7";
+                }
+            }
+        }
+        for (String[] strings : mapArray) {
             for (int j = 0; j < mapArray.length; j++) {
-                System.out.print(chars[j] + " ");
+                System.out.print(strings[j] + " ");
             }
             System.out.println();
         }
@@ -91,5 +103,20 @@ public class ConfigurationValidatorImpl implements ConfigurationValidator {
         }
 
         return mapArray;
+    }
+
+    public String[][] convertChar2DToString2D(char[][] charArray) {
+        int rows = charArray.length;
+        int cols = charArray[0].length;
+
+        String[][] stringArray = new String[rows][cols];
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                stringArray[i][j] = String.valueOf(charArray[i][j]);
+            }
+        }
+
+        return stringArray;
     }
 }
