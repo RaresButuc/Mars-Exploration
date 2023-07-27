@@ -49,7 +49,7 @@ public class Application {
                 resourcesDatabase.add(simulationContext.getRover().getNamed(), simulationContext.getNumberOfSteps(), simulationContext.getNumberOfResources(), simulationContext.getExplorationOutcome().toString());
                 consoleLogger.logInfo("File ResultsAfterExploration-" + i + ".map successful created.");
             } else {
-                consoleLogger.logError("Invalid landing Spot");
+                consoleLogger.logError("Invalid landing Spot for spaceship-" + i);
             }
         }
 
