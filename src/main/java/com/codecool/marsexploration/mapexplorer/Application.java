@@ -7,6 +7,7 @@ import com.codecool.marsexploration.mapexplorer.maploader.MapLoaderImpl;
 import com.codecool.marsexploration.mapexplorer.maploader.model.Coordinate;
 import com.codecool.marsexploration.mapexplorer.rovers.InitializeRover;
 import com.codecool.marsexploration.mapexplorer.rovers.model.MarsRover;
+import com.codecool.marsexploration.mapexplorer.simulation.ExplorationSimulator;
 import com.codecool.marsexploration.mapexplorer.simulation.SimulationContext;
 import com.codecool.marsexploration.mapexplorer.simulation.ExplorationSimulatorNotUsed;
 
@@ -33,8 +34,10 @@ public class Application {
 
 //            HashMap<String, List<Coordinate>> resources = explorationSimulatorNotUsed.getResources(mapConfiguration);
             MarsRover rover = initializeRover.initializeRover(landingSpot, 2, resources, mapConfiguration);
-            SimulationContext simulationContext = new SimulationContext(2, 2, rover, landingSpot, mapFile, resources);
+            SimulationContext simulationContext = new SimulationContext(0, 10, rover, landingSpot, mapFile, resources);
 //        explorationSimulatorNotUsed.runSimulation(mapConfiguration, 2);
+            ExplorationSimulator explorationSimulator = new ExplorationSimulator(simulationContext,configurationValidator,mapConfiguration);
+            explorationSimulator.startExploring();
 //        explorationSimulator.getResources(mapConfiguration);
             System.out.println(rover.getCurrentPosition());
         }else {

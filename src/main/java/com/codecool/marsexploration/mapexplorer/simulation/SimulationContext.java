@@ -16,6 +16,7 @@ public class SimulationContext {
     private  HashMap<String, List<Coordinate>>monitoredResources;
     private ExplorationOutcome explorationOutcome;
 
+
     // Constructor
     public SimulationContext(int numberOfSteps, int timeoutSteps, MarsRover rover,
                              Coordinate spaceshipLocation, String map,
@@ -60,5 +61,29 @@ public class SimulationContext {
 
     public  HashMap<String, List<Coordinate>> getMonitoredResources() {
         return monitoredResources;
+    }
+
+    public void setNumberOfSteps(int numberOfSteps) {
+        this.numberOfSteps = numberOfSteps;
+    }
+
+    public void setTimeoutSteps(int timeoutSteps) {
+        this.timeoutSteps = timeoutSteps;
+    }
+
+    public void setRover(MarsRover rover) {
+        this.rover = rover;
+    }
+
+    public void setSpaceshipLocation(Coordinate spaceshipLocation) {
+        this.spaceshipLocation = spaceshipLocation;
+    }
+
+    public void setMap(String map) {
+        this.map = map;
+    }
+
+    public void setMonitoredResources(HashMap<String, List<Coordinate>> monitoredResources) {
+        this.monitoredResources = monitoredResources;
     }
 }
