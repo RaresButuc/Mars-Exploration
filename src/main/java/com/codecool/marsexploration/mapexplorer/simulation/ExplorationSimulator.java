@@ -90,4 +90,6 @@ public class ExplorationSimulator {
 
         return resourcesMap;
     }
+
+
 }

@@ -9,9 +9,7 @@ import com.codecool.marsexploration.mapexplorer.rovers.InitializeRover;
 import com.codecool.marsexploration.mapexplorer.rovers.model.MarsRover;
 import com.codecool.marsexploration.mapexplorer.simulation.ExplorationSimulator;
 import com.codecool.marsexploration.mapexplorer.simulation.SimulationContext;
-import com.codecool.marsexploration.mapexplorer.simulation.ExplorationSimulatorNotUsed;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
