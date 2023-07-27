@@ -17,6 +17,7 @@ public class Application {
     private static final String workDir = "src/main";
 
     public static void main(String[] args) {
+        
         String mapFile = workDir + "/resources/exploration-0.map";
         HashMap<String, List<Coordinate>> resources = new HashMap<>();
         Coordinate landingSpot = new Coordinate(6, 6);
