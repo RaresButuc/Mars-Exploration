@@ -29,11 +29,12 @@ public class ConfigurationValidatorImpl implements ConfigurationValidator {
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 Coordinate coordinateToAdd = new Coordinate(x + i, y + j);
-                if (checkLandingSpots(coordinateToAdd, mapConfiguration)) {
+                if (!coordinateToAdd.equals(coordinate) && checkLandingSpots(coordinateToAdd, mapConfiguration)) {
                     adjCoordinates.add(coordinateToAdd);
                 }
             }
         }
+        //System.out.println(adjCoordinates);
         return adjCoordinates;
     }
 

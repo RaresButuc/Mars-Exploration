@@ -4,6 +4,7 @@ import com.codecool.marsexploration.mapexplorer.exploration.ExplorationOutcome;
 import com.codecool.marsexploration.mapexplorer.maploader.model.Coordinate;
 import com.codecool.marsexploration.mapexplorer.rovers.model.MarsRover;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class SimulationContext {
@@ -12,13 +13,14 @@ public class SimulationContext {
     private MarsRover rover;
     private Coordinate spaceshipLocation;
     private String map;
-    private List<String> monitoredResources;
+    private  HashMap<String, List<Coordinate>>monitoredResources;
     private ExplorationOutcome explorationOutcome;
+
 
     // Constructor
     public SimulationContext(int numberOfSteps, int timeoutSteps, MarsRover rover,
                              Coordinate spaceshipLocation, String map,
-                             List<String> monitoredResources) {
+                             HashMap<String, List<Coordinate>> monitoredResources) {
         this.numberOfSteps = numberOfSteps;
         this.timeoutSteps = timeoutSteps;
         this.rover = rover;
@@ -57,7 +59,31 @@ public class SimulationContext {
         return map;
     }
 
-    public List<String> getMonitoredResources() {
+    public  HashMap<String, List<Coordinate>> getMonitoredResources() {
         return monitoredResources;
+    }
+
+    public void setNumberOfSteps(int numberOfSteps) {
+        this.numberOfSteps = numberOfSteps;
+    }
+
+    public void setTimeoutSteps(int timeoutSteps) {
+        this.timeoutSteps = timeoutSteps;
+    }
+
+    public void setRover(MarsRover rover) {
+        this.rover = rover;
+    }
+
+    public void setSpaceshipLocation(Coordinate spaceshipLocation) {
+        this.spaceshipLocation = spaceshipLocation;
+    }
+
+    public void setMap(String map) {
+        this.map = map;
+    }
+
+    public void setMonitoredResources(HashMap<String, List<Coordinate>> monitoredResources) {
+        this.monitoredResources = monitoredResources;
     }
 }

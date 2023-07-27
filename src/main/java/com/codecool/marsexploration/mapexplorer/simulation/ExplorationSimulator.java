@@ -1,71 +1,84 @@
 package com.codecool.marsexploration.mapexplorer.simulation;
 
 import com.codecool.marsexploration.mapexplorer.configuration.ConfigurationValidator;
-import com.codecool.marsexploration.mapexplorer.configuration.ConfigurationValidatorImpl;
 import com.codecool.marsexploration.mapexplorer.configuration.model.Configuration;
 import com.codecool.marsexploration.mapexplorer.exploration.ExplorationOutcome;
+import com.codecool.marsexploration.mapexplorer.logger.FileLogger;
 import com.codecool.marsexploration.mapexplorer.maploader.MapLoaderImpl;
 import com.codecool.marsexploration.mapexplorer.maploader.model.Coordinate;
-import com.codecool.marsexploration.mapexplorer.rovers.InitializeRover;
-import com.codecool.marsexploration.mapexplorer.rovers.model.MarsRover;
-import com.sun.security.jgss.GSSUtil;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class ExplorationSimulator {
-    private final InitializeRover initializeRover = new InitializeRover();
-    private final ConfigurationValidator configurationValidator = new ConfigurationValidatorImpl();
+    private SimulationContext simulationContext;
+    private ConfigurationValidator configurationValidator;
+    private Configuration configuration;
 
-    public ExplorationOutcome runSimulation(Configuration configuration) {
-        Coordinate landingSpot = configuration.landingSpot();
-        boolean isValidLandingSpot =configurationValidator.checkLandingSpots(landingSpot, configuration);
-        int sight = configuration.steps();
-        HashMap<String, List<Coordinate>> resources = getResources(configuration);
+    public ExplorationSimulator(SimulationContext simulationContext, ConfigurationValidator configurationValidator, Configuration configuration) {
+        this.simulationContext = simulationContext;
+        this.configuration = configuration;
+        this.configurationValidator = configurationValidator;
+//        this.startExploring();
+    }
 
-        // Generate the context
-        MarsRover marsRover = initializeRover.initializeRover(landingSpot, sight, resources, configuration);
-        if (marsRover == null || !isValidLandingSpot) {
-            // Rover could not be initialized, return ERROR
-            return ExplorationOutcome.ERROR;
-        }
+    public void startExploring() {
+        List<Coordinate> visitedCoordonate = new ArrayList<>();
+        while (simulationContext.getNumberOfSteps() < simulationContext.getTimeoutSteps() && simulationContext.getExplorationOutcome()!= ExplorationOutcome.COLONIZABLE) {
+            Random random = new Random();
+            List<Coordinate> adjacentCoordinate = configurationValidator.checkAdjacentCoordinate(simulationContext.getRover().getCurrentPosition(), configuration);
+            if (adjacentCoordinate.size() > 0) {
+                Coordinate roverPosition = simulationContext.getRover().getCurrentPosition();
+                Coordinate newRandomRoverPosition = adjacentCoordinate.get(random.nextInt(adjacentCoordinate.size()));
+                visitedCoordonate.add(roverPosition);
 
-        int steps = configuration.steps();
-        for (int step = 1; step <= steps; step++) {
-            // Run ordered simulation steps for each iteration of the loop
-            ExplorationOutcome outcome = runSimulationStep(marsRover);
-            if (outcome == ExplorationOutcome.TIMEOUT || outcome == ExplorationOutcome.COLONIZABLE) {
-                // Outcome found, terminate the simulation
-                System.out.println("outcome.name().length()");
-                return outcome;
+                if(!new HashSet<>(visitedCoordonate).containsAll(adjacentCoordinate) && !new HashSet<>(adjacentCoordinate).containsAll(visitedCoordonate)){
+                    while (visitedCoordonate.contains(newRandomRoverPosition)){
+                        newRandomRoverPosition = adjacentCoordinate.get(random.nextInt(adjacentCoordinate.size()));
+                    }
+                }
+
+                simulationContext.getRover().setCurrentPosition(newRandomRoverPosition);
+
+
+                //   System.out.println("Rover at : " + roverPosition.X() + ", " + roverPosition.Y() );
+                simulationContext.setNumberOfSteps(simulationContext.getNumberOfSteps() + 1);
+                FileLogger fileLogger = new FileLogger("src/main/resources/ResultsAfterexploration-0.map");
+                fileLogger.logInfo("STEP" + simulationContext.getNumberOfSteps());
+                if (configurationValidator.checkAdjacentCoordinate(roverPosition, configuration).size() < 8) {
+                    simulationContext.getMonitoredResources().putAll(findResources(configuration, simulationContext.getRover().getCurrentPosition()));
+                    for (String symbolKey : simulationContext.getMonitoredResources().keySet()) {
+                        List<Coordinate> coordinates = simulationContext.getMonitoredResources().get(symbolKey);
+                        System.out.println("Symbol: " + symbolKey);
+                        for (Coordinate coordinate : coordinates) {
+                            System.out.println("   Coordinate: " + coordinate);
+                        }
+                    }
+                    System.out.println("__________________________________________");
+                }
             }
         }
 
-        // Simulation completed without finding the desired outcome within the steps limit
-        return ExplorationOutcome.TIMEOUT;
+
+        simulationContext.setExplorationOutcome(ExplorationOutcome.TIMEOUT);
+        simulationContext.getRover().setCurrentPosition(simulationContext.getSpaceshipLocation());
+
+
     }
 
-    private ExplorationOutcome runSimulationStep(MarsRover rover) {
-        Coordinate currentPosition = rover.getCurrentPosition();
-        //System.out.println(currentPosition);
-        // Implement the logic for a single simulation step here.
-        // You can move the rover, update its sight, check for resources, etc.
-        // Return ExplorationOutcome.COLONIZABLE if the rover finds a desired outcome, otherwise, return ExplorationOutcome.ERROR.
-   return null;
-    }
-
-    public  HashMap<String, List<Coordinate>> getResources(Configuration configuration) {
+    public HashMap<String, List<Coordinate>> findResources(Configuration configuration, Coordinate currentRoverPosition) {
         List<String> mapLoader = new MapLoaderImpl().readAllLines(configuration.map());
-        String map= String.join("", mapLoader);
-        System.out.println("map= "+map);
+        String map = String.join("", mapLoader);
+        // System.out.println("map= "+map);
         HashMap<String, List<Coordinate>> resourcesMap = new HashMap<>();
-        int rows = mapLoader.size();
-        int cols = mapLoader.get(0).length();
-
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                char symbol = map.charAt(i * (cols) + j);
+//        int rows = mapLoader.size();
+//        int cols = mapLoader.get(0).length();
+        int startX = (currentRoverPosition.X() == 0 ? 0 : currentRoverPosition.X() - 1);
+        int startY = (currentRoverPosition.Y() == 0 ? 0 : currentRoverPosition.Y() - 1);
+        int stopX = (currentRoverPosition.X() == mapLoader.size() - 1 ? currentRoverPosition.X() : currentRoverPosition.X() + 1);
+        int stopY = (currentRoverPosition.Y() == mapLoader.size() - 1 ? currentRoverPosition.Y() : currentRoverPosition.Y() + 1);
+        for (int i = startX; i <= stopX; i++) {
+            for (int j = startY; j <= stopY; j++) {
+                char symbol = map.charAt(i * (mapLoader.size()) + j);
                 if (symbol != ' ' && symbol != '\n') {
                     String symbolKey = Character.toString(symbol);
                     Coordinate coordinate = new Coordinate(j, i);
@@ -73,14 +86,10 @@ public class ExplorationSimulator {
                 }
             }
         }
-        for (String symbolKey : resourcesMap.keySet()) {
-            List<Coordinate> coordinates = resourcesMap.get(symbolKey);
-            System.out.println("Symbol: " + symbolKey);
-            for (Coordinate coordinate : coordinates) {
-                System.out.println("   Coordinate: " + coordinate);
-            }
-        }
+
 
         return resourcesMap;
     }
+
+
 }
