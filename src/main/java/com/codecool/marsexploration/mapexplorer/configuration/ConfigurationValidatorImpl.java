@@ -71,7 +71,7 @@ public class ConfigurationValidatorImpl implements ConfigurationValidator {
                 } else if(mapArray[i][j].equals("&")){
                     mapArray[i][j] = "\uD83D\uDEB5";
                 } else if(mapArray[i][j].equals("%") ){
-                    mapArray[i][j] = "\uD83D\uDDFF";
+                    mapArray[i][j] = "\uD83D\uDD36";
                 } else if(mapArray[i][j].equals("*")){
                     mapArray[i][j] = "\uD83D\uDCA7";
                 }
