@@ -6,10 +6,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.*;
 
-
-public class ResourcesImpl implements Resources{
+public class ResourcesImpl implements Resources {
     private final String dbFile;
     private final Logger logger;
 
@@ -28,19 +26,19 @@ public class ResourcesImpl implements Resources{
         } catch (SQLException e) {
             logger.logError(e.getMessage());
         }
-
-        return conn;
+        return null;
     }
 
     @Override
-    public void add( int steps, int amountOfResources, String outcome){
-        String sql = "INSERT INTO ResourcesMars( steps, amountOfResources, outcome) VALUES(?,?,?)";
+    public void add(String name, int steps, int amountOfResources, String outcome) {
+        String sql = "INSERT INTO ResourcesMars(id, steps, amountOfResources, outcome) VALUES(?,?,?,?)";
         try (Connection conn = getConnection()) {
             assert conn != null;
             try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-                pstmt.setInt(1, steps);
-                pstmt.setInt(2, amountOfResources);
-                pstmt.setString(3, outcome);
+                pstmt.setString(1, name);
+                pstmt.setInt(2, steps);
+                pstmt.setInt(3, amountOfResources);
+                pstmt.setString(4, outcome);
                 pstmt.executeUpdate();
             }
         } catch (SQLException e) {
@@ -64,7 +62,13 @@ public class ResourcesImpl implements Resources{
     }
 
     @Override
-    public void displayAllResourcesFromDatabase() {
-
+    public void deleteAll() {
+        String sql = "DELETE FROM ResourcesMars";
+        try (Connection conn = this.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
