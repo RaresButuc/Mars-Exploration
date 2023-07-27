@@ -7,6 +7,7 @@ import com.codecool.marsexploration.mapexplorer.maploader.model.Coordinate;
 
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -72,6 +73,35 @@ public class ConfigurationValidatorImpl implements ConfigurationValidator {
             return mapArray[x][y] == ' ';
         }
         return false;
+    }
+@Override
+    public void roverMap(Configuration mapConfiguration, List<Coordinate> coordinates){
+
+        String map = convertConfigurationIntoMap(mapConfiguration);
+        int sqrtOfMapSize = (int) Math.sqrt(map.length());
+        char[][] mapArray = new char[sqrtOfMapSize][sqrtOfMapSize];
+
+        // Convert the map string into a 2D array
+        int index = 0;
+        for (int i = 0; i < sqrtOfMapSize; i++) {
+            for (int j = 0; j < sqrtOfMapSize; j++) {
+                mapArray[i][j] = map.charAt(index++);
+            }
+        }
+
+        for(Coordinate coordinate : coordinates){
+            mapArray[coordinate.X()][coordinate.Y()] = '@';
+        }
+
+
+    for (int i = 0; i < sqrtOfMapSize; i++) {
+        for (int j = 0; j < sqrtOfMapSize; j++) {
+            System.out.print(mapArray[i][j] + " ");
+        }
+        System.out.println();
+    }
+
+
     }
 
     public String convertConfigurationIntoMap(Configuration mapConfiguration){

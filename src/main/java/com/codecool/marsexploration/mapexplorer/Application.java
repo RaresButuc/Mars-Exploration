@@ -13,6 +13,7 @@ import com.codecool.marsexploration.mapexplorer.simulation.SimulationContext;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 public class Application {
     private static final String workDir = "src/main";
@@ -21,7 +22,10 @@ public class Application {
         for(int i=0; i<3; i++){
             String mapFile = workDir + "/resources/exploration-"+i+".map";
             HashMap<String, List<Coordinate>> resources = new HashMap<>();
-            Coordinate landingSpot = new Coordinate(6, 6);
+            Random random = new Random();
+            int x = random.nextInt(32);
+            int y = random.nextInt(32);
+            Coordinate landingSpot = new Coordinate(x, y);
             MapLoader mapLoader= new MapLoaderImpl();
             ConfigurationValidatorImpl configurationValidator = new ConfigurationValidatorImpl();
             Configuration mapConfiguration = new Configuration(mapFile, landingSpot, List.of("#", "&", "*", "%"), 30);

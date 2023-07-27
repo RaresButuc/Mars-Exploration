@@ -74,19 +74,11 @@ public class ExplorationSimulator {
             }
         }
         fileLogger.logInfo("STEP " + simulationContext.getNumberOfSteps() + "; EVENT outcome; OUTCOME " + simulationContext.getExplorationOutcome());
-        displayMapWithSteps(visitedCoordonate, simulationContext);
+        configurationValidator.roverMap(configuration,visitedCoordonate);
         simulationContext.getRover().setCurrentPosition(simulationContext.getSpaceshipLocation());
     }
 
-    private void displayMapWithSteps(List<Coordinate> visitedCoordonate, SimulationContext simulationContext){
-        MapLoader mapLoader = new MapLoaderImpl();
-        Map map = mapLoader.load(simulationContext.getMap());
-        for(Coordinate coordinate: visitedCoordonate){
-            map[coordinate.X()][coordinate.Y()] == "R";
-        }
-        System.out.println(.toString());
 
-    }
 
     public HashMap<String, List<Coordinate>> findResources(Configuration configuration, Coordinate currentRoverPosition) {
         List<String> mapLoader = new MapLoaderImpl().readAllLines(configuration.map());

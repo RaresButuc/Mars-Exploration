@@ -13,4 +13,5 @@ public interface ConfigurationValidator {
     boolean checkSymbols(List<String> symbols);
 
     boolean checkLandingSpots(Coordinate coordinate, Configuration configuration);
+    public void roverMap(Configuration mapConfiguration, List<Coordinate> coordinates);
 }
