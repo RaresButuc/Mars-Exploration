@@ -23,7 +23,7 @@ public class ExplorationSimulator {
 
     public void startExploring() {
         List<Coordinate> visitedCoordonate = new ArrayList<>();
-        while (simulationContext.getNumberOfSteps() < simulationContext.getTimeoutSteps()) {
+        while (simulationContext.getNumberOfSteps() < simulationContext.getTimeoutSteps() && simulationContext.getExplorationOutcome()!= ExplorationOutcome.COLONIZABLE) {
             Random random = new Random();
             List<Coordinate> adjacentCoordinate = configurationValidator.checkAdjacentCoordinate(simulationContext.getRover().getCurrentPosition(), configuration);
             if (adjacentCoordinate.size() > 0) {
@@ -57,7 +57,12 @@ public class ExplorationSimulator {
                 }
             }
         }
+
+
         simulationContext.setExplorationOutcome(ExplorationOutcome.TIMEOUT);
+        simulationContext.getRover().setCurrentPosition(simulationContext.getSpaceshipLocation());
+
+
     }
 
     public HashMap<String, List<Coordinate>> findResources(Configuration configuration, Coordinate currentRoverPosition) {
