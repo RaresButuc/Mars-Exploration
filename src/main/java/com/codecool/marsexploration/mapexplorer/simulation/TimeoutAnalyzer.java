@@ -7,7 +7,7 @@ public class TimeoutAnalyzer implements OutcomeAnalyzer {
     @Override
     public boolean hasReachedOutcome(SimulationContext context, Configuration configuration) {
 
-context.setExplorationOutcome(ExplorationOutcome.TIMEOUT);
+        context.setExplorationOutcome(ExplorationOutcome.TIMEOUT);
         return context.getNumberOfSteps() >= context.getTimeoutSteps();
     }
 }

@@ -20,9 +20,9 @@ public class ExplorationSimulator {
         this.configuration = configuration;
         this.configurationValidator = configurationValidator;
         this.analyzers = new ArrayList<>();
-        this.analyzers.add(new TimeoutAnalyzer());
         this.analyzers.add(new SuccessAnalyzer());
         this.analyzers.add(new LackOfResourcesAnalyzer());
+        this.analyzers.add(new TimeoutAnalyzer());
 //        this.startExploring();
     }
 
