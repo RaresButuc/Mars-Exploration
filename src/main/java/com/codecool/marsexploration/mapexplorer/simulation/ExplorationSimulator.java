@@ -29,7 +29,7 @@ public class ExplorationSimulator {
 
     public void startExploring() {
         List<Coordinate> visitedCoordonate = new ArrayList<>();
-
+        FileLogger fileLogger = new FileLogger("src/main/resources/ResultsAfterexploration-0.map");
         while (simulationContext.getNumberOfSteps() < simulationContext.getTimeoutSteps() && simulationContext.getExplorationOutcome() != ExplorationOutcome.COLONIZABLE
                 && !isOutcomeReached(simulationContext, configuration)) {
 
@@ -56,8 +56,8 @@ public class ExplorationSimulator {
 
                 //   System.out.println("Rover at : " + roverPosition.X() + ", " + roverPosition.Y() );
                 simulationContext.setNumberOfSteps(simulationContext.getNumberOfSteps() + 1);
-                FileLogger fileLogger = new FileLogger("src/main/resources/ResultsAfterexploration-0.map");
-                fileLogger.logInfo("STEP" + simulationContext.getNumberOfSteps());
+
+                fileLogger.logInfo("STEP " + simulationContext.getNumberOfSteps() + "; EVENT searching; UNIT "+ simulationContext.getRover().getNamed() + "; POSITION [" + roverPosition.X() + "," + roverPosition.Y() + "]");
                 if (configurationValidator.checkAdjacentCoordinate(roverPosition, configuration).size() < 8) {
                     simulationContext.getMonitoredResources().putAll(findResources(configuration, simulationContext.getRover().getCurrentPosition()));
 //                        for (String symbolKey : simulationContext.getMonitoredResources().keySet()) {
@@ -71,6 +71,7 @@ public class ExplorationSimulator {
                 }
             }
         }
+        fileLogger.logInfo("STEP " + simulationContext.getNumberOfSteps() + "; EVENT outcome; OUTCOME " + simulationContext.getExplorationOutcome());
         System.out.println("Outcome: " + simulationContext.getExplorationOutcome());
         System.out.println("Places Been: "+ visitedCoordonate);
         simulationContext.getRover().setCurrentPosition(simulationContext.getSpaceshipLocation());
