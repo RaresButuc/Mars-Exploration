@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class MarsRover {
-    private  Coordinate currentPosition;
+    private Coordinate currentPosition;
     private final int sight;
     private final HashMap<String, List<Coordinate>> resources;
 
@@ -25,36 +25,12 @@ public class MarsRover {
         this.resources = resources;
     }
 
-    public int getId() {
-        return id;
-    }
-
     public String getNamed() {
         return name;
     }
 
     public Coordinate getCurrentPosition() {
         return currentPosition;
-    }
-
-    public int getSight() {
-        return sight;
-    }
-
-    public HashMap<String, List<Coordinate>> getResources() {
-        return resources;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public static void setCounter(int counter) {
-        MarsRover.counter = counter;
     }
 
     public void setCurrentPosition(Coordinate currentPosition) {
