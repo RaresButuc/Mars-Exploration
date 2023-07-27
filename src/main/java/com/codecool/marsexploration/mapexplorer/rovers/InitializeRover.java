@@ -6,14 +6,15 @@ import com.codecool.marsexploration.mapexplorer.configuration.model.Configuratio
 import com.codecool.marsexploration.mapexplorer.maploader.model.Coordinate;
 import com.codecool.marsexploration.mapexplorer.rovers.model.MarsRover;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
 
 public class InitializeRover {
     private final ConfigurationValidator configurationValidator = new ConfigurationValidatorImpl();
 
     public MarsRover initializeRover(Coordinate coordinate, int sight, HashMap<String, List<Coordinate>> resources, Configuration configuration) {
-        List<Coordinate> emptySpots = configurationValidator.checkAdjacentCoordinate(coordinate,configuration );
-//        System.out.println("Empty spots "+emptySpots);
+        List<Coordinate> emptySpots = configurationValidator.checkAdjacentCoordinate(coordinate, configuration);
         Random randomPosition = new Random();
         if (emptySpots.size() > 0) {
             Coordinate randomCoordinate = emptySpots.get(randomPosition.nextInt(emptySpots.size()));

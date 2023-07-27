@@ -1,25 +1,17 @@
 package com.codecool.marsexploration.mapexplorer.configuration;
 
 import com.codecool.marsexploration.mapexplorer.configuration.model.Configuration;
-import com.codecool.marsexploration.mapexplorer.maploader.MapLoader;
 import com.codecool.marsexploration.mapexplorer.maploader.MapLoaderImpl;
 import com.codecool.marsexploration.mapexplorer.maploader.model.Coordinate;
 
-import java.time.Duration;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 public class ConfigurationValidatorImpl implements ConfigurationValidator {
 
     @Override
     public boolean validateConfigurationObject(Configuration mapConfiguration) {
-        return mapConfiguration.steps() > 0
-                && checkLandingSpots(mapConfiguration.landingSpot(), mapConfiguration)
-                && checkAdjacentCoordinate(mapConfiguration.landingSpot(), mapConfiguration).size() > 0
-                && !mapConfiguration.map().isEmpty()
-                && checkSymbols(mapConfiguration.symbols());
+        return mapConfiguration.steps() > 0 && checkLandingSpots(mapConfiguration.landingSpot(), mapConfiguration) && checkAdjacentCoordinate(mapConfiguration.landingSpot(), mapConfiguration).size() > 0 && !mapConfiguration.map().isEmpty() && checkSymbols(mapConfiguration.symbols());
     }
 
     @Override
@@ -35,7 +27,6 @@ public class ConfigurationValidatorImpl implements ConfigurationValidator {
                 }
             }
         }
-        //System.out.println(adjCoordinates);
         return adjCoordinates;
     }
 
@@ -55,57 +46,50 @@ public class ConfigurationValidatorImpl implements ConfigurationValidator {
 
     @Override
     public boolean checkLandingSpots(Coordinate coordinate, Configuration mapConfiguration) {
-        String map = convertConfigurationIntoMap(mapConfiguration);
         int x = coordinate.X();
         int y = coordinate.Y();
-        int sqrtOfMapSize = (int) Math.sqrt(map.length());
-        char[][] mapArray = new char[sqrtOfMapSize][sqrtOfMapSize];
+        char[][] mapArray = getMap2D(mapConfiguration);
 
-        // Convert the map string into a 2D array
-        int index = 0;
-        for (int i = 0; i < sqrtOfMapSize; i++) {
-            for (int j = 0; j < sqrtOfMapSize; j++) {
-                mapArray[i][j] = map.charAt(index++);
-            }
-        }
-        // Check if the spot is valid
-        if (x >= 0 && x < sqrtOfMapSize && y >= 0 && y < sqrtOfMapSize) {
+        if (x >= 0 && x < mapArray.length && y >= 0 && y < mapArray.length) {
             return mapArray[x][y] == ' ';
         }
+
         return false;
     }
-@Override
-    public void roverMap(Configuration mapConfiguration, List<Coordinate> coordinates){
 
-        String map = convertConfigurationIntoMap(mapConfiguration);
-        int sqrtOfMapSize = (int) Math.sqrt(map.length());
-        char[][] mapArray = new char[sqrtOfMapSize][sqrtOfMapSize];
+    @Override
+    public void roverMap(Configuration mapConfiguration, List<Coordinate> coordinates) {
+        char[][] mapArray = getMap2D(mapConfiguration);
 
-        // Convert the map string into a 2D array
-        int index = 0;
-        for (int i = 0; i < sqrtOfMapSize; i++) {
-            for (int j = 0; j < sqrtOfMapSize; j++) {
-                mapArray[i][j] = map.charAt(index++);
-            }
-        }
-
-        for(Coordinate coordinate : coordinates){
+        for (Coordinate coordinate : coordinates) {
             mapArray[coordinate.X()][coordinate.Y()] = '@';
         }
 
-
-    for (int i = 0; i < sqrtOfMapSize; i++) {
-        for (int j = 0; j < sqrtOfMapSize; j++) {
-            System.out.print(mapArray[i][j] + " ");
+        for (char[] chars : mapArray) {
+            for (int j = 0; j < mapArray.length; j++) {
+                System.out.print(chars[j] + " ");
+            }
+            System.out.println();
         }
-        System.out.println();
     }
 
-
-    }
-
-    public String convertConfigurationIntoMap(Configuration mapConfiguration){
+    public String convertConfigurationIntoMap(Configuration mapConfiguration) {
         List<String> mapLoader = new MapLoaderImpl().readAllLines(mapConfiguration.map());
         return String.join("", mapLoader);
+    }
+
+    private char[][] getMap2D(Configuration mapConfiguration) {
+        String map = convertConfigurationIntoMap(mapConfiguration);
+        int sqrtOfMapSize = (int) Math.sqrt(map.length());
+        char[][] mapArray = new char[sqrtOfMapSize][sqrtOfMapSize];
+        int index = 0;
+
+        for (int i = 0; i < sqrtOfMapSize; i++) {
+            for (int j = 0; j < sqrtOfMapSize; j++) {
+                mapArray[i][j] = map.charAt(index++);
+            }
+        }
+
+        return mapArray;
     }
 }
