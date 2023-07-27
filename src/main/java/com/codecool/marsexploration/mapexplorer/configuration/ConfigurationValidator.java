@@ -14,5 +14,5 @@ public interface ConfigurationValidator {
 
     boolean checkLandingSpots(Coordinate coordinate, Configuration configuration);
 
-     void roverMap(Configuration mapConfiguration, List<Coordinate> coordinates);
+     void roverMap(Coordinate spaceshipLocation, Configuration mapConfiguration, List<Coordinate> coordinates);
 }
