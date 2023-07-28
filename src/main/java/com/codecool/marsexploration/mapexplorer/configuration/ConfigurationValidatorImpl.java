@@ -67,14 +67,11 @@ public class ConfigurationValidatorImpl implements ConfigurationValidator {
         mapArray[spaceshipLocation.X()][spaceshipLocation.Y()] =  "\uD83D\uDE80";
         for(int i=0; i<mapArray.length; i++){
             for(int j=0; j<mapArray[i].length; j++){
-                if(mapArray[i][j].equals("#")){
-                    mapArray[i][j] = "\uD83D\uDDFB";
-                } else if(mapArray[i][j].equals("&")){
-                    mapArray[i][j] = "\uD83D\uDEB5";
-                } else if(mapArray[i][j].equals("%") ){
-                    mapArray[i][j] = "\uD83D\uDD36";
-                } else if(mapArray[i][j].equals("*")){
-                    mapArray[i][j] = "\uD83D\uDCA7";
+                switch (mapArray[i][j]) {
+                    case "#" -> mapArray[i][j] = "\uD83D\uDDFB";
+                    case "&" -> mapArray[i][j] = "\uD83D\uDEB5";
+                    case "%" -> mapArray[i][j] = "\uD83D\uDD36";
+                    case "*" -> mapArray[i][j] = "\uD83D\uDCA7";
                 }
             }
         }
@@ -86,7 +83,7 @@ public class ConfigurationValidatorImpl implements ConfigurationValidator {
             System.out.println();
         }
     }
-
+//todo utils with all private methods
     public String convertConfigurationIntoMap(Configuration mapConfiguration) {
         List<String> mapLoader = new MapLoaderImpl().readAllLines(mapConfiguration.map());
         return String.join("", mapLoader);

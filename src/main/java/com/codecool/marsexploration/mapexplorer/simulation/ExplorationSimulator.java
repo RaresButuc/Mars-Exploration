@@ -30,10 +30,10 @@ public class ExplorationSimulator {
 
     public void startExploring() {
         List<Coordinate> visitedCoordonate = new ArrayList<>();
+        Random random = new Random();
         fileLogger.clearLogFile();
         while (simulationContext.getNumberOfSteps() < simulationContext.getTimeoutSteps() && simulationContext.getExplorationOutcome() != ExplorationOutcome.COLONIZABLE
                 && !isOutcomeReached(simulationContext, configuration)) {
-            Random random = new Random();
             List<Coordinate> adjacentCoordinate = configurationValidator.checkAdjacentCoordinate(simulationContext.getRover().getCurrentPosition(), configuration);
             if (adjacentCoordinate.size() > 0) {
                 Coordinate roverPosition = simulationContext.getRover().getCurrentPosition();
@@ -87,8 +87,10 @@ public class ExplorationSimulator {
         for (OutcomeAnalyzer analyzer : analyzers) {
             if (analyzer.hasReachedOutcome(context, configuration)) {
                 return true;
+                //todo replace with stream and reduce between analyzers
             }
         }
         return false;
     }
+
 }

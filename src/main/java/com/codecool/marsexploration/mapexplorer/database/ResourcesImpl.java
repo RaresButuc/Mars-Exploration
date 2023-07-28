@@ -46,27 +46,14 @@ public class ResourcesImpl implements Resources {
         }
     }
 
-    public void add(String userName, String password) throws SQLException {
-        String sql = "INSERT INTO Users(user_name,password) VALUES(?,?)";
-
-        try (Connection conn = getConnection()) {
-            assert conn != null;
-            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-                pstmt.setString(1, userName);
-                pstmt.setString(2, password);
-                pstmt.executeUpdate();
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
     @Override
     public void deleteAll() {
         String sql = "DELETE FROM ResourcesMars";
-        try (Connection conn = this.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.executeUpdate();
+        try (Connection conn = this.getConnection()) {
+            assert conn != null;
+            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.executeUpdate();
+            }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
