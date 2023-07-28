@@ -22,6 +22,7 @@ public class SuccessAnalyzer implements OutcomeAnalyzer {
                 && context.getMonitoredResources().containsKey("*"))
                 || (sizeOfMineral > 4
                 && sizeOfWater > 3)
-                || (checked);
+                || checked;
     }
+    //todo return with 3 booleans
 }

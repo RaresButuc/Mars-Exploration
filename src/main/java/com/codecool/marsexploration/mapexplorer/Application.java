@@ -26,20 +26,6 @@ public class Application {
     private static final String workDir = "src/main";
 
     public static void main(String[] args) {
-//        mapArray[coordinate.X()][coordinate.Y()] = "\uD83D\uDE97";
-//    }
-//    mapArray[spaceshipLocation.X()][spaceshipLocation.Y()] =  "\uD83D\uDE80";
-//        for(int i=0; i<mapArray.length; i++){
-//        for(int j=0; j<mapArray[i].length; j++){
-//            if(mapArray[i][j].equals("#")){
-//                mapArray[i][j] = "\uD83D\uDDFB";
-//            } else if(mapArray[i][j].equals("&")){
-//                mapArray[i][j] = "\uD83D\uDEB5";
-//            } else if(mapArray[i][j].equals("%") ){
-//                mapArray[i][j] = "\uD83D\uDD36";
-//            } else if(mapArray[i][j].equals("*")){
-//                mapArray[i][j] = "\uD83D\uDCA7";
-//            }
         Logger consoleLogger  = new ConsoleLogger();
         consoleLogger.logInfo("Legend:");
         consoleLogger.logInfo("Rover-\uD83D\uDE97");
