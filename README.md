@@ -1,4 +1,4 @@
-# Mars Exploration 2
+# Mars Exploration 
 
 ## Project Description 
 The "Mars Exploration" Java project is a simulation where a rover is dispatched to explore a specific area on Mars. Equipped with sophisticated sensors and navigation capabilities, the rover's primary objective is to locate essential resources required for human survival. Every step of the rover is marked inside a report and once it identifies and gathers these vital resources, it sends the report to the Earth approving a future colonization.
